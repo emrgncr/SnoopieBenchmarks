@@ -1,0 +1,3 @@
+offset,size,obj_id,dev_id
+0x00007f8e0f400200,32,1,1
+0x00007f8e0f400400,32,2,1

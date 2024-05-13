@@ -1,0 +1,179 @@
+[pid:466430]NDEV: 2
+[pid:466430]
+****************
+Options:
+DATA LENGHT: 8
+DATA TYPE: 0
+NUM_GPUS: 2
+ITERATIONS: 1
+WARMUP ITERATIONS: 0
+****************
+Bgn Context0: 9644182168309
+MEMTRACE: STARTING CONTEXT 0x55a0f71b1300
+Bgn Recv Thread 0: 9644182631921
+Bgn Waiting Recv Thread 0: 9644182632190
+Bgn Cuda Event ExitcuDevicePrimaryCtxRetain cuDevicePrimaryCtxRetain 386 cuDevicePrimaryCtxRetain: 9644182640212
+End Cuda Event ExitcuDevicePrimaryCtxRetain: 9644182640246
+Bgn Cuda Event EntercuCtxGetCurrent cuCtxGetCurrent 304 cuCtxGetCurrent: 9644182640261
+End Cuda Event EntercuCtxGetCurrent: 9644182640264
+Bgn Cuda Event ExitcuCtxGetCurrent cuCtxGetCurrent 304 cuCtxGetCurrent: 9644182640267
+End Cuda Event ExitcuCtxGetCurrent: 9644182640269
+Bgn Cuda Event EntercuCtxGetDevice cuCtxGetDevice 16 cuCtxGetDevice: 9644182640272
+End Cuda Event EntercuCtxGetDevice: 9644182640275
+Bgn Cuda Event ExitcuCtxGetDevice cuCtxGetDevice 16 cuCtxGetDevice: 9644182640277
+End Cuda Event ExitcuCtxGetDevice: 9644182640279
+Bgn Cuda Event EntercuMemAlloc_v2 cuMemAlloc_v2 243 cuMemAlloc_v2: 9644182640289
+End Cuda Event EntercuMemAlloc_v2: 9644182640291
+Bgn Cuda Event ExitcuMemAlloc_v2 cuMemAlloc_v2 243 cuMemAlloc_v2: 9644182640305
+Bgn Cuda Event EntercuCtxGetDevice cuCtxGetDevice 16 cuCtxGetDevice: 9644182640324
+End Cuda Event EntercuCtxGetDevice: 9644182640326
+Bgn Cuda Event ExitcuCtxGetDevice cuCtxGetDevice 16 cuCtxGetDevice: 9644182640328
+End Cuda Event ExitcuCtxGetDevice: 9644182640331
+End Cuda Event ExitcuMemAlloc_v2: 9644182895750
+Bgn Cuda Event EntercuMemAlloc_v2 cuMemAlloc_v2 243 cuMemAlloc_v2: 9644182895807
+End Cuda Event EntercuMemAlloc_v2: 9644182895812
+Bgn Cuda Event ExitcuMemAlloc_v2 cuMemAlloc_v2 243 cuMemAlloc_v2: 9644182895847
+Bgn Cuda Event EntercuCtxGetDevice cuCtxGetDevice 16 cuCtxGetDevice: 9644182895866
+End Cuda Event EntercuCtxGetDevice: 9644182895868
+Bgn Cuda Event ExitcuCtxGetDevice cuCtxGetDevice 16 cuCtxGetDevice: 9644182895871
+End Cuda Event ExitcuCtxGetDevice: 9644182895873
+End Cuda Event ExitcuMemAlloc_v2: 9644182895913
+Bgn Cuda Event EntercuMemAlloc_v2 cuMemAlloc_v2 243 cuMemAlloc_v2: 9644182895917
+End Cuda Event EntercuMemAlloc_v2: 9644182895919
+Bgn Cuda Event ExitcuMemAlloc_v2 cuMemAlloc_v2 243 cuMemAlloc_v2: 9644182895926
+Bgn Cuda Event EntercuCtxGetDevice cuCtxGetDevice 16 cuCtxGetDevice: 9644182895931
+End Cuda Event EntercuCtxGetDevice: 9644182895933
+Bgn Cuda Event ExitcuCtxGetDevice cuCtxGetDevice 16 cuCtxGetDevice: 9644182895936
+End Cuda Event ExitcuCtxGetDevice: 9644182895938
+End Cuda Event ExitcuMemAlloc_v2: 9644182895962
+asd0
+asd1
+Bgn Cuda Event EntercuMemcpyHtoD_v2 cuMemcpyHtoD_v2 276 cuMemcpyHtoD_v2: 9644182895993
+End Cuda Event EntercuMemcpyHtoD_v2: 9644182895995
+Bgn Cuda Event ExitcuMemcpyHtoD_v2 cuMemcpyHtoD_v2 276 cuMemcpyHtoD_v2: 9644182896047
+End Cuda Event ExitcuMemcpyHtoD_v2: 9644182896049
+asd2
+Bgn Cuda Event EntercuMemcpyDtoH_v2 cuMemcpyDtoH_v2 278 cuMemcpyDtoH_v2: 9644182896053
+End Cuda Event EntercuMemcpyDtoH_v2: 9644182896055
+Bgn Cuda Event ExitcuMemcpyDtoH_v2 cuMemcpyDtoH_v2 278 cuMemcpyDtoH_v2: 9644182896085
+End Cuda Event ExitcuMemcpyDtoH_v2: 9644182896087
+[pid:466430]CUDA FIRST INT: 1779180321
+BEGIN ITER
+Create request no 0
+Create request no 1
+ISEND to 1 
+Issuing non-blocking send to rank 1
+Bgn Cuda Event EntercuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182896140
+End Cuda Event EntercuPointerGetAttributes: 9644182896143
+Bgn Cuda Event ExitcuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182896147
+End Cuda Event ExitcuPointerGetAttributes: 9644182896149
+Bgn Cuda Event EntercuCtxGetCurrent cuCtxGetCurrent 304 cuCtxGetCurrent: 9644182896153
+End Cuda Event EntercuCtxGetCurrent: 9644182896155
+Bgn Cuda Event ExitcuCtxGetCurrent cuCtxGetCurrent 304 cuCtxGetCurrent: 9644182896158
+End Cuda Event ExitcuCtxGetCurrent: 9644182896161
+Bgn Cuda Event EntercuCtxGetCurrent cuCtxGetCurrent 304 cuCtxGetCurrent: 9644182896166
+End Cuda Event EntercuCtxGetCurrent: 9644182896169
+Bgn Cuda Event ExitcuCtxGetCurrent cuCtxGetCurrent 304 cuCtxGetCurrent: 9644182896171
+End Cuda Event ExitcuCtxGetCurrent: 9644182896193
+Bgn Cuda Event EntercuStreamCreate cuStreamCreate 124 cuStreamCreate: 9644182908367
+End Cuda Event EntercuStreamCreate: 9644182908369
+Bgn Cuda Event ExitcuStreamCreate cuStreamCreate 124 cuStreamCreate: 9644182908397
+End Cuda Event ExitcuStreamCreate: 9644182908400
+Bgn Cuda Event EntercuStreamCreate cuStreamCreate 124 cuStreamCreate: 9644182908402
+End Cuda Event EntercuStreamCreate: 9644182908405
+Bgn Cuda Event ExitcuStreamCreate cuStreamCreate 124 cuStreamCreate: 9644182908413
+End Cuda Event ExitcuStreamCreate: 9644182908415
+Bgn Cuda Event EntercuStreamCreate cuStreamCreate 124 cuStreamCreate: 9644182908418
+End Cuda Event EntercuStreamCreate: 9644182908420
+Bgn Cuda Event ExitcuStreamCreate cuStreamCreate 124 cuStreamCreate: 9644182908426
+End Cuda Event ExitcuStreamCreate: 9644182908428
+Bgn Cuda Event EntercuStreamCreate cuStreamCreate 124 cuStreamCreate: 9644182908431
+End Cuda Event EntercuStreamCreate: 9644182908433
+Bgn Cuda Event ExitcuStreamCreate cuStreamCreate 124 cuStreamCreate: 9644182908439
+End Cuda Event ExitcuStreamCreate: 9644182908442
+Bgn Cuda Event EntercuMemHostRegister_v2 cuMemHostRegister_v2 379 cuMemHostRegister_v2: 9644182908446
+cuMemHostRegisterv2 0x7fa1e505b6bc 4
+End Cuda Event EntercuMemHostRegister_v2: 9644182908453
+Bgn Cuda Event ExitcuMemHostRegister_v2 cuMemHostRegister_v2 379 cuMemHostRegister_v2: 9644182908891
+End Cuda Event ExitcuMemHostRegister_v2: 9644182908895
+Bgn Cuda Event EntercuMemcpyAsync cuMemcpyAsync 306 cuMemcpyAsync: 9644182908906
+Bgn Cuda Event EntercuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182908919
+End Cuda Event EntercuPointerGetAttributes: 9644182908922
+Bgn Cuda Event ExitcuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182908930
+End Cuda Event ExitcuPointerGetAttributes: 9644182908932
+Bgn Cuda Event EntercuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182908935
+End Cuda Event EntercuPointerGetAttributes: 9644182908937
+Bgn Cuda Event ExitcuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182908940
+End Cuda Event ExitcuPointerGetAttributes: 9644182908942
+memcpy asyn info:  dst: 0 0x000055a0f736ebbe src: 2 0x00007fa1a3400200size: 32
+End Cuda Event EntercuMemcpyAsync: 9644182908948
+Bgn Cuda Event ExitcuMemcpyAsync cuMemcpyAsync 306 cuMemcpyAsync: 9644182908977
+End Cuda Event ExitcuMemcpyAsync: 9644182908979
+Bgn Cuda Event EntercuStreamSynchronize cuStreamSynchronize 126 cuStreamSynchronize: 9644182908983
+End Cuda Event EntercuStreamSynchronize: 9644182908985
+Bgn Cuda Event ExitcuStreamSynchronize cuStreamSynchronize 126 cuStreamSynchronize: 9644182908991
+End Cuda Event ExitcuStreamSynchronize: 9644182908994
+IRECV from 1 
+Bgn Cuda Event EntercuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182909242
+End Cuda Event EntercuPointerGetAttributes: 9644182909248
+Bgn Cuda Event ExitcuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182909251
+End Cuda Event ExitcuPointerGetAttributes: 9644182909253
+Bgn Cuda Event EntercuCtxGetCurrent cuCtxGetCurrent 304 cuCtxGetCurrent: 9644182909256
+End Cuda Event EntercuCtxGetCurrent: 9644182909258
+Bgn Cuda Event ExitcuCtxGetCurrent cuCtxGetCurrent 304 cuCtxGetCurrent: 9644182909261
+End Cuda Event ExitcuCtxGetCurrent: 9644182909263
+Bgn Cuda Event EntercuMemcpyAsync cuMemcpyAsync 306 cuMemcpyAsync: 9644182930736
+Bgn Cuda Event EntercuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182930746
+End Cuda Event EntercuPointerGetAttributes: 9644182930749
+Bgn Cuda Event ExitcuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182930752
+End Cuda Event ExitcuPointerGetAttributes: 9644182930755
+Bgn Cuda Event EntercuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182930757
+End Cuda Event EntercuPointerGetAttributes: 9644182930760
+Bgn Cuda Event ExitcuPointerGetAttributes cuPointerGetAttributes 450 cuPointerGetAttributes: 9644182930764
+End Cuda Event ExitcuPointerGetAttributes: 9644182930766
+memcpy asyn info:  dst: 2 0x00007fa1a3400600 src: 0 0x00007fa1e03e3c3esize: 32
+End Cuda Event EntercuMemcpyAsync: 9644182930771
+Bgn Cuda Event ExitcuMemcpyAsync cuMemcpyAsync 306 cuMemcpyAsync: 9644182930784
+End Cuda Event ExitcuMemcpyAsync: 9644182930786
+Bgn Cuda Event EntercuStreamSynchronize cuStreamSynchronize 126 cuStreamSynchronize: 9644182930789
+End Cuda Event EntercuStreamSynchronize: 9644182930791
+Bgn Cuda Event ExitcuStreamSynchronize cuStreamSynchronize 126 cuStreamSynchronize: 9644182930798
+End Cuda Event ExitcuStreamSynchronize: 9644182930800
+DONE ITER
+Bgn Cuda Event EntercuMemcpyDtoH_v2 cuMemcpyDtoH_v2 278 cuMemcpyDtoH_v2: 9644182930809
+End Cuda Event EntercuMemcpyDtoH_v2: 9644182930811
+Bgn Cuda Event ExitcuMemcpyDtoH_v2 cuMemcpyDtoH_v2 278 cuMemcpyDtoH_v2: 9644182930831
+End Cuda Event ExitcuMemcpyDtoH_v2: 9644182930833
+[pid:466430]CUDA RECV INT: -763028558 FROM 1
+Bgn Cuda Event EntercuMemFree_v2 cuMemFree_v2 245 cuMemFree_v2: 9644182930838
+End Cuda Event EntercuMemFree_v2: 9644182930840
+Bgn Cuda Event ExitcuMemFree_v2 cuMemFree_v2 245 cuMemFree_v2: 9644182930855
+End Cuda Event ExitcuMemFree_v2: 9644182930857
+Bgn Cuda Event EntercuMemFree_v2 cuMemFree_v2 245 cuMemFree_v2: 9644182930860
+End Cuda Event EntercuMemFree_v2: 9644182930863
+Bgn Cuda Event ExitcuMemFree_v2 cuMemFree_v2 245 cuMemFree_v2: 9644182930870
+End Cuda Event ExitcuMemFree_v2: 9644182930873
+Bgn Cuda Event EntercuMemFree_v2 cuMemFree_v2 245 cuMemFree_v2: 9644182930876
+End Cuda Event EntercuMemFree_v2: 9644182930878
+Bgn Cuda Event ExitcuMemFree_v2 cuMemFree_v2 245 cuMemFree_v2: 9644182930887
+End Cuda Event ExitcuMemFree_v2: 9644182930889
+Bgn Cuda Event EntercuMemHostUnregister cuMemHostUnregister 302 cuMemHostUnregister: 9644182931799
+End Cuda Event EntercuMemHostUnregister: 9644182931811
+Bgn Cuda Event ExitcuMemHostUnregister cuMemHostUnregister 302 cuMemHostUnregister: 9644182932029
+End Cuda Event ExitcuMemHostUnregister: 9644182932032
+Bgn Cuda Event EntercuStreamDestroy_v2 cuStreamDestroy_v2 326 cuStreamDestroy_v2: 9644182944426
+End Cuda Event EntercuStreamDestroy_v2: 9644182944429
+Bgn Cuda Event ExitcuStreamDestroy_v2 cuStreamDestroy_v2 326 cuStreamDestroy_v2: 9644182944440
+End Cuda Event ExitcuStreamDestroy_v2: 9644182944442
+Bgn Cuda Event EntercuStreamDestroy_v2 cuStreamDestroy_v2 326 cuStreamDestroy_v2: 9644182944445
+End Cuda Event EntercuStreamDestroy_v2: 9644182944447
+Bgn Cuda Event ExitcuStreamDestroy_v2 cuStreamDestroy_v2 326 cuStreamDestroy_v2: 9644182944455
+End Cuda Event ExitcuStreamDestroy_v2: 9644182944457
+Bgn Cuda Event EntercuStreamDestroy_v2 cuStreamDestroy_v2 326 cuStreamDestroy_v2: 9644182944460
+End Cuda Event EntercuStreamDestroy_v2: 9644182944462
+Bgn Cuda Event ExitcuStreamDestroy_v2 cuStreamDestroy_v2 326 cuStreamDestroy_v2: 9644182944469
+End Cuda Event ExitcuStreamDestroy_v2: 9644182944472
+Bgn Cuda Event EntercuStreamDestroy_v2 cuStreamDestroy_v2 326 cuStreamDestroy_v2: 9644182944474
+End Cuda Event EntercuStreamDestroy_v2: 9644182944476
+Bgn Cuda Event ExitcuStreamDestroy_v2 cuStreamDestroy_v2 326 cuStreamDestroy_v2: 9644182944483
+End Cuda Event ExitcuStreamDestroy_v2: 9644182944486

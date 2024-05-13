@@ -1,0 +1,29 @@
+pc,func_name,file_name,line_no
+94285791238512,"main",,0
+140514523994814,"",,0
+140514797619594,"Nvbit::callback(CUctx_st*, int, int, char const*, void*, cudaError_enum*)",,0
+140514557047165,"",,0
+140514556200629,"",,0
+140514553174266,"",,0
+140514797411741,"nvbit_at_cuda_event",,0
+140514797651428,"nvbitToolsCallbackFunc(void*, CUtools_cb_domain_enum, unsigned int, void const*)",,0
+140514553417282,"cudaMalloc",,0
+140514556980749,"",,0
+140514553363469,"",,0
+140514552976904,"start_thread",/build/glibc-e2p3jK/glibc-2.31/nptl/pthread_create.c,477
+140514551050370,"__libc_start_main",../csu/libc-start.c,308
+140514556233987,"",,0
+140514556239092,"ncclCommInitAll",,0
+140514525548589,"",,0
+140514556762686,"",,0
+140514552079186,"__clone",../sysdeps/unix/sysv/linux/x86_64/clone.S,95
+140514556182683,"",,0
+140514556265605,"",,0
+140514523988696,"",,0
+94285791238395,"main",,0
+94285791237197,"_start",,0
+94285791238899,"main",,0
+140514556224200,"",,0
+140514556229224,"",,0
+140514556200203,"",,0
+140514556265125,"",,0

@@ -12,16 +12,23 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
-#include <stdio.h>
 
 #define DEBUG 1
+
+/**
+ *
+ * I will try to replicate MPI's send/receive operation
+ * with cuda 
+ * */
+
+
 
 static struct options opts;
 static struct parser_doc parser_doc;
 
 clock_t start, endparse, cusetup, endwarmup, enditer, end;
 
-void bench_iter(int nDev, void *sendbuff, void *recvbuff, int size,
+void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
                 MPI_Datatype data_type, int myRank);
 
 static uint64_t getHostHash(const char *string) {
@@ -88,15 +95,15 @@ int main(int argc, char *argv[]) {
       localRank++;
   }
 
-  FILE *file_ptr;
-  char file_name[] = "processlog_x.asd";
-  file_name[11] = '0' + myRank;
-  file_ptr = freopen(file_name, "w", stdout);
-  
-
   int nDev = nRanks;
   void *sendbuff;
   void *recvbuff;
+
+  FILE *file_ptr;
+  char file_name[] = "processlog_x.asd";
+  file_name[11] = '0' + myRank;
+//  file_ptr = freopen(file_name, "w", stderr);
+
 
   REPORT("NDEV: %d\n", nDev);
 
@@ -105,76 +112,108 @@ int main(int argc, char *argv[]) {
 
   CUDACHECK(cudaSetDevice(localRank));
   CUDACHECK(cudaMalloc(&sendbuff, size * data_size));
-  CUDACHECK(cudaMalloc(&(recvbuff), size * data_size));
+  CUDACHECK(cudaMalloc(&recvbuff, size * data_size));
 
   random_fill(sendbuff, size * data_size);
+
+
+  MPI_Win win;
+  void *shared_array;
+  printf("STARTING SHARED MEMORY\n");
+  MPICHECK(MPI_Win_allocate_shared(size * data_size, 1, MPI_INFO_NULL, MPI_COMM_WORLD, &shared_array, &win));
+ 
+  printf("SUCCESSFULLY ALLOCATED\n");
+
+  cudaStream_t stream;
+  CUDACHECK(cudaStreamCreate(&stream));
+	
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  if(localRank == 1){
+	CUDACHECK(cudaMemcpyAsync(shared_array, sendbuff, size * data_size, cudaMemcpyDefault, stream));
+  	cudaStreamSynchronize(stream);
+  }
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  
+  if(localRank == 0){
+	CUDACHECK(cudaMemcpyAsync(recvbuff, shared_array, size * data_size, cudaMemcpyDefault, stream));
+  	cudaStreamSynchronize(stream);
+  }
+ 
+  MPI_Barrier(MPI_COMM_WORLD);
+  
 
 #ifdef DEBUG
   int *_test = malloc(size * data_size);
   CUDACHECK(
       cudaMemcpy(_test, sendbuff, size * data_size, cudaMemcpyDeviceToHost));
   REPORT("CUDA FIRST INT: %d\n", _test[0]);
+  CUDACHECK(
+      cudaMemcpy(_test, recvbuff, size * data_size, cudaMemcpyDeviceToHost));
+  REPORT("CUDA RECV F INT: %d\n", _test[0]);
   free(_test);
 #endif
 
   cusetup = clock();
 
-  for (int iter = 0; iter < opts.warmup_iterations; iter++) {
-    bench_iter(nDev, sendbuff, recvbuff, size, data_type, myRank);
-  }
-
-  endwarmup = clock();
-
-  for (int iter = 0; iter < opts.iterations; iter++) {
-    bench_iter(nDev, sendbuff, recvbuff, size, data_type, myRank);
-  }
 
   enditer = clock();
 
-#ifdef DEBUG
-  _test = malloc(size * data_size);
-  CUDACHECK(
-      cudaMemcpy(_test, recvbuff, size * data_size, cudaMemcpyDeviceToHost));
-  REPORT("CUDA REDUCE INT: %d\n", _test[0]);
-  free(_test);
-#endif
 
   // free device buffers
 
   CUDACHECK(cudaFree(sendbuff));
   CUDACHECK(cudaFree(recvbuff));
-
+    MPI_Win_free(&win);
   MPICHECK(MPI_Finalize());
 
   end = clock();
 
-	fclose(file_ptr);
-
-#define CLOCK_CONVERT(x) (((double)x) / CLOCKS_PER_SEC)
-
-  REPORT("Completed Succesfully\n"
-         "parsing arguments: %.2f\n"
-         "cuda setup: %.2f\n"
-         "warmup, avg: %.2f, %.2f\n"
-         "iterations, avg: %.2f, %.2f\n"
-         "cleanup: %.2f\n"
-         "total: %.2f\n\n",
-         CLOCK_CONVERT(endparse - start), CLOCK_CONVERT(cusetup - endparse),
-         CLOCK_CONVERT(endwarmup - cusetup),
-         (CLOCK_CONVERT(endwarmup - cusetup)) /
-             (opts.warmup_iterations > 0 ? opts.warmup_iterations : 1),
-         CLOCK_CONVERT(enditer - endwarmup),
-         (CLOCK_CONVERT(enditer - endwarmup)) /
-             (opts.iterations > 0 ? opts.iterations : 1),
-         CLOCK_CONVERT(end - enditer), CLOCK_CONVERT(end - start));
+//	fclose(file_ptr);
   return 0;
 }
 
-void bench_iter(int nDev, void *sendbuff, void *recvbuff, int size,
+void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
                 MPI_Datatype data_type, int myRank) {
-  	printf("STARTING ITER\n");
-	printf("sendBuffer: %p, recvbuff: %p\n", sendbuff, recvbuff);
-	MPICHECK(MPI_Allreduce(sendbuff, recvbuff, size, data_type, MPI_SUM,
-                         MPI_COMM_WORLD));
-	printf("DONE ITER\n");
+	printf("BEGIN ITER\n");
+
+  /* :/ DOES NOT WORK IN MPI 4!
+    MPI_Request reqs[nDev - 1];
+    for(int i = 0; i < nDev - 1; i++){
+      memcpy(reqs[i],  MPI_REQUEST_NULL, sizeof(MPI_Request));
+    }
+    for (int i = 0; i < nDev; ++i) {
+      if (i == myRank)
+        continue;
+      int j = i;
+      if(i > myRank) j --;
+      MPICHECK(MPI_Isendrecv(sendbuff, size, data_type, i, 0, recvbuff[i], size,
+                             data_type, i, 0, MPI_COMM_WORLD, &(reqs[j])));
+    }
+    MPICHECK(MPI_Waitall(nDev - 1, reqs, MPI_STATUSES_IGNORE));
+  */
+  MPI_Request reqs[2 * (nDev - 1)];
+  for (int i = 0; i < 2 * (nDev - 1); i++) {
+	  printf("Create request no %d\n", i);
+    memcpy(&(reqs[i]), MPI_REQUEST_NULL, sizeof(MPI_Request));
+  }
+  for (int i = 0; i < nDev; ++i) {
+    if (i == myRank)
+      continue;
+    int j = i;
+    if (i > myRank)
+      j--;
+    printf("ISEND to %d \n", i);
+    MPICHECK(
+        MPI_Isend(sendbuff, size, data_type, i, 0, MPI_COMM_WORLD, &(reqs[j])));
+    //printf("IRECV from %d \n", i);
+    /*
+    MPICHECK(MPI_Irecv(recvbuff[i], size, data_type, i, 0, MPI_COMM_WORLD,
+                       &(reqs[nDev - 1 + j])));
+    */
+  }
+  //MPICHECK(MPI_Waitall(2 * (nDev - 1), reqs, MPI_STATUSES_IGNORE));
+  printf("DONE ITER\n");
 }

@@ -91,6 +91,13 @@ int main(int argc, char *argv[]) {
   void *sendbuff;
   void *recvbuff[nDev];
 
+
+  FILE *file_ptr;
+  char file_name[] = "processlog_x.asd";
+  file_name[11] = '0' + myRank;
+  file_ptr = freopen(file_name, "w", stdout);
+
+
   REPORT("NDEV: %d\n", nDev);
 
   report_options(&opts);
@@ -147,6 +154,7 @@ int main(int argc, char *argv[]) {
 
   end = clock();
 
+	fclose(file_ptr);
 #define CLOCK_CONVERT(x) (((double)x) / CLOCKS_PER_SEC)
 
   REPORT("Completed Succesfully\n"
@@ -169,6 +177,7 @@ int main(int argc, char *argv[]) {
 
 void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
                 MPI_Datatype data_type, int myRank) {
+	printf("BEGIN ITER\n");
 
   /* :/ DOES NOT WORK IN MPI 4!
     MPI_Request reqs[nDev - 1];
@@ -187,6 +196,7 @@ void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
   */
   MPI_Request reqs[2 * (nDev - 1)];
   for (int i = 0; i < 2 * (nDev - 1); i++) {
+	  printf("Create request no %d\n", i);
     memcpy(&(reqs[i]), MPI_REQUEST_NULL, sizeof(MPI_Request));
   }
   for (int i = 0; i < nDev; ++i) {
@@ -195,10 +205,15 @@ void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
     int j = i;
     if (i > myRank)
       j--;
+    printf("ISEND to %d \n", i);
     MPICHECK(
         MPI_Isend(sendbuff, size, data_type, i, 0, MPI_COMM_WORLD, &(reqs[j])));
+    //printf("IRECV from %d \n", i);
+    /*
     MPICHECK(MPI_Irecv(recvbuff[i], size, data_type, i, 0, MPI_COMM_WORLD,
                        &(reqs[nDev - 1 + j])));
+    */
   }
-  MPICHECK(MPI_Waitall(2 * (nDev - 1), reqs, MPI_STATUSES_IGNORE));
+  //MPICHECK(MPI_Waitall(2 * (nDev - 1), reqs, MPI_STATUSES_IGNORE));
+  printf("DONE ITER\n");
 }

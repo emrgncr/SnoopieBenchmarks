@@ -1,0 +1,6 @@
+pc,func_name,file_name,line_no
+94401494840781,"_start",,0
+94401494844988,"main",,0
+139884687002677,"nvshmem_malloc",,0
+139884659740802,"__libc_start_main",../csu/libc-start.c,308
+94401494845025,"main",,0

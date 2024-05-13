@@ -85,6 +85,13 @@ int main(int argc, char *argv[]) {
 
   int nDev = nRanks;
 
+  FILE *file_ptr;
+  char file_name[] = "processlog_x.asd";
+  file_name[11] = '0' + myRank;
+  file_ptr = freopen(file_name, "w", stdout);
+
+
+
   ncclUniqueId id;
   ncclComm_t comm;
   void *sendbuff;
@@ -100,14 +107,18 @@ int main(int argc, char *argv[]) {
 
   report_options(&opts);
   endparse = clock();
-
+  printf("1");
   CUDACHECK(cudaSetDevice(localRank));
+  printf("1");
   CUDACHECK(cudaMalloc(&sendbuff, size * data_size));
+  printf("1");
   CUDACHECK(cudaMalloc(&(recvbuff), size * data_size));
+  printf("1");
   CUDACHECK(cudaStreamCreate(&s));
+  printf("2");
 
   random_fill(sendbuff, size * data_size);
-
+  printf("asd\n");;
   // initializing NCCL
   NCCLCHECK(ncclCommInitRank(&comm, nRanks, id, myRank));
 
@@ -136,6 +147,8 @@ int main(int argc, char *argv[]) {
   MPICHECK(MPI_Finalize());
 
   end = clock();
+
+	fclose(file_ptr);
 
 #define CLOCK_CONVERT(x) (((double)x) / CLOCKS_PER_SEC)
 
