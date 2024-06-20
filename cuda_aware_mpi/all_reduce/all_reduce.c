@@ -174,6 +174,7 @@ void bench_iter(int nDev, void *sendbuff, void *recvbuff, int size,
                 MPI_Datatype data_type, int myRank) {
   	printf("STARTING ITER\n");
 	printf("sendBuffer: %p, recvbuff: %p\n", sendbuff, recvbuff);
+	#pragma acc host_data use_device (sendbuff, recvbuff)
 	MPICHECK(MPI_Allreduce(sendbuff, recvbuff, size, data_type, MPI_SUM,
                          MPI_COMM_WORLD));
 	printf("DONE ITER\n");

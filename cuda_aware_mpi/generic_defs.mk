@@ -21,7 +21,7 @@ endif
 CUDA_INCLUDE ?= $(CUDA_PATH)/include
 CUDA_LIB ?= $(CUDA_PATH)/lib
 
-INCLUDES := -I$(CUDA_INCLUDE)
-LIBS :=  -L$(CUDA_LIB) -L$(CUDA_LIB)64
+INCLUDES := -I$(CUDA_INCLUDE) -I$(shell echo $$MPI_HOME)/include
+LIBS :=  -L$(CUDA_LIB) -L$(CUDA_LIB)64 -L$(shell echo $$MPI_HOME)/lib
 
 LD := -lnuma -lcudart -lmpi

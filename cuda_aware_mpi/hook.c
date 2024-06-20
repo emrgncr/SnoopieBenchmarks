@@ -5,11 +5,21 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdint.h>
-/*
+#include <string.h>
+
 typedef void* (*malloc_t)(size_t sz);
 static malloc_t real_malloc = NULL;
 
+typedef struct _malloc_store_t{
+	long long address;
+	unsigned long size;
+	struct _malloc_store_t* next;
+} _malloc_store_t;
 
+static _malloc_store_t* mstore = NULL;
+static unsigned int store_size = 0;
+static unsigned int current_idx = 0;
+static char store_allocs = 1;
 
 void print_pointer_address(void *ptr) {
     uintptr_t addr = (uintptr_t)ptr;
@@ -40,17 +50,45 @@ void print_pointer_address(void *ptr) {
 }
 
 
+
+
+long long is_ptr_allocated(void* _ptr){
+	long long ptr = (long long)_ptr;
+	_malloc_store_t* current = mstore;
+	for(;;){
+		current = current->next;
+		if(current == NULL) break;
+		printf("(%p, %lu)\n", (void*)current->address, current->size);
+	}
+	return -1;
+
+}
+
+
 void* malloc(size_t size) {
     if(!real_malloc){
     	real_malloc = (malloc_t)dlsym(RTLD_NEXT, "malloc");
+    	mstore = (_malloc_store_t*)real_malloc(sizeof(_malloc_store_t));
+	mstore->address = 0;
+	mstore->size = 0;
+	mstore->next = NULL;
     }
     void* ptr = real_malloc(size); // Call the original malloc function
-    //printf("Found %p\n", ptr);
-    print_pointer_address(ptr);
+    if(store_allocs){
+    _malloc_store_t* current = mstore;
+    while(current->next != NULL) current = current->next;
+    _malloc_store_t* nallocated = (_malloc_store_t*)real_malloc(sizeof(_malloc_store_t));
+
+    nallocated->address = (long long) ptr;
+    nallocated->size = size;
+    nallocated->next = NULL;
+    current->next = nallocated;
+    }
+    //printf("Found %p,%n\n", ptr, size);
+    //print_pointer_address(ptr);
     return ptr;
 }
 
-*/
 
 // Define function pointer type for the original MPI_Send
 typedef int (*MPI_Send_t)(const void *, int, MPI_Datatype, int, int, MPI_Comm);
@@ -85,7 +123,7 @@ static MPI_Isend_t real_MPI_Isend = NULL;
 int MPI_Isend(const void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request *request) {
     // Print debugging information
     printf("Issuing non-blocking send to rank %d\n", dest);
-
+    store_allocs = 1;
     // Call the original MPI_Isend using function pointer
     if (!real_MPI_Isend) {
         // Initialize real_MPI_Isend on first call
@@ -96,7 +134,12 @@ int MPI_Isend(const void *buf, int count, MPI_Datatype datatype, int dest, int t
         }
     }
 
-    return real_MPI_Isend(buf, count, datatype, dest, tag, comm, request);
+    int r =  real_MPI_Isend(buf, count, datatype, dest, tag, comm, request);
+    store_allocs = 0;
+    printf("TESTM  \n");
+    is_ptr_allocated(0x0);
+    printf("TESTM  \n");
+    return r;
 }
 
 

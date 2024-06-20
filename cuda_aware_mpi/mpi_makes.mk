@@ -1,5 +1,6 @@
 
-CC := mpicc
+CC := nvcc
+CFLAGS := -ccbin mpicc 
 
 all: $(TARGET)
 

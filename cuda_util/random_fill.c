@@ -13,15 +13,12 @@ Assumes device is already set
 void random_fill(void *pointer, int length) {
   char *buffer = malloc(sizeof(char) * length);
 
-  printf("asd0\n");
   int fd = open("/dev/urandom", O_RDONLY);
   read(fd, buffer, length);
   close(fd);
 
-  printf("asd1\n");
   CUDACHECK(cudaMemcpy(pointer, buffer, length, cudaMemcpyHostToDevice));
   free(buffer);
-  printf("asd2\n");
 }
 
 void random_fill_host(void *pointer, int length) {
