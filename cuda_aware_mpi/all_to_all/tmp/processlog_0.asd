@@ -1,0 +1,21 @@
+[pid:2530126]NDEV: 2
+[pid:2530126]
+****************
+Options:
+DATA LENGHT: 8
+DATA TYPE: 0
+NUM_GPUS: 0
+ITERATIONS: 1
+WARMUP ITERATIONS: 0
+****************
+asd0
+asd1
+asd2
+[pid:2530126]CUDA FIRST INT: -43406315
+BEGIN ITER
+Create request no 0
+Create request no 1
+ISEND to 1 
+IRECV from 1 
+DONE ITER
+[pid:2530126]CUDA RECV INT: -2074238676 FROM 1

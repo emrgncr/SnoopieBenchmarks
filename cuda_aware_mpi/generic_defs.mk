@@ -21,7 +21,9 @@ endif
 CUDA_INCLUDE ?= $(CUDA_PATH)/include
 CUDA_LIB ?= $(CUDA_PATH)/lib
 
-INCLUDES := -I$(CUDA_INCLUDE) -I$(shell echo $$MPI_HOME)/include
-LIBS :=  -L$(CUDA_LIB) -L$(CUDA_LIB)64 -L$(shell echo $$MPI_HOME)/lib
-
-LD := -lnuma -lcudart -lmpi
+INCLUDES := -I$(CUDA_INCLUDE) -I$(shell echo $$MPI_HOME)/include 
+LIBS :=  -L$(CUDA_LIB) -L$(CUDA_LIB)64 -L$(shell echo $$MPI_HOME)/lib -L/home/it4i-gencere/repos/ucx_build/lib/ucx/ -L/home/it4i-gencere/repos/ucx_build/lib/ -L/home/it4i-gencere/repos/ucx-snoop-v2/
+#-L/apps/all/UCX-CUDA/1.16.0-GCCcore-12.2.0-CUDA-12.3.0/ucx
+#-L/apps/all/UCX-CUDA/1.16.0-GCCcore-12.2.0-CUDA-12.3.0/ucx
+#-L/home/it4i-gencere/repos/ucx_build/lib/ucx/ -L/home/it4i-gencere/repos/ucx_build/lib/ #
+LD := -lnuma -lcuda -lcudart -lmpi -lgdrapi -luct -lucp -libverbs -lrdmacm -luct_rdmacm -luct_ib -lsnoop_ucx

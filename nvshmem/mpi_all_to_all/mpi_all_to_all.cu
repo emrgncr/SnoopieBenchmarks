@@ -188,6 +188,8 @@ void bench_iter(int nDev, void *sendbuff, void *recvbuff, int size,
                 int data_type, cudaStream_t stream) {
 
   // start the kernel in each iteration
+	std::cout << "start kernel " << std::endl;
   all_to_all_kernel<<<1, 1, 0, stream>>>(sendbuff, recvbuff, size, data_type);
   nvshmemx_barrier_all_on_stream(stream);
+  std::cout << "after barrier " << std::endl;
 }

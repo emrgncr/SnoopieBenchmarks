@@ -1,0 +1,18 @@
+[pid:3588302]NDEV: 2 localrank: 0 hostname: acn54 
+[pid:3588302]
+****************
+Options:
+DATA LENGHT: 10240
+DATA TYPE: 0
+NUM_GPUS: 2
+ITERATIONS: 1
+WARMUP ITERATIONS: 0
+****************
+[pid:3588302]CUDA FIRST INT: -415823300
+BEGIN ITER 0x154d2b200000 0x154d2b20a000
+Create request no 0
+Create request no 1
+ISEND to 1 0x154d2b200000 
+IRECV from 1 0x154d2b214000 
+DONE ITER
+[pid:3588302]CUDA RECV INT: 630839932 FROM 1

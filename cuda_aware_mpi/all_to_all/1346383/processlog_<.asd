@@ -1,0 +1,10 @@
+[pid:3856616]NDEV: 16
+[pid:3856616]
+****************
+Options:
+DATA LENGHT: 10240
+DATA TYPE: 0
+NUM_GPUS: 16
+ITERATIONS: 1
+WARMUP ITERATIONS: 0
+****************

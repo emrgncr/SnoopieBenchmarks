@@ -14,7 +14,8 @@
 #include <unistd.h>
 
 #define DEBUG 1
-#define PRINTFILE 0 
+// #define PRINTFILE 0 
+//#define ONLY_ONE_SEND 1
 
 static struct options opts;
 static struct parser_doc parser_doc;
@@ -99,7 +100,7 @@ int main(int argc, char *argv[]) {
   file_ptr = freopen(file_name, "w", stdout);
 #endif
 
-  REPORT("NDEV: %d\n", nDev);
+  REPORT("NDEV: %d localrank: %d hostname: %s \n", nDev, localRank, hostname);
 
   report_options(&opts);
   endparse = clock();
@@ -177,6 +178,8 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+#ifndef ONLY_ONE_SEND
+
 void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
                 MPI_Datatype data_type, int myRank) {
 	printf("BEGIN ITER %p %p\n", sendbuff, recvbuff[0]);
@@ -218,3 +221,50 @@ void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
   MPICHECK(MPI_Waitall(2 * (nDev - 1), reqs, MPI_STATUSES_IGNORE));
   printf("DONE ITER\n");
 }
+
+
+/*
+ISEND IreCV
+void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
+                MPI_Datatype data_type, int myRank) {
+	printf("BEGIN ITER %p %p\n", sendbuff, recvbuff[0]);
+  sleep(10);
+  MPI_Request reqs[1];
+  for (int i = 0; i < 1; i++) {
+	  printf("Create request no %d\n", i);
+    memcpy(&(reqs[i]), MPI_REQUEST_NULL, sizeof(MPI_Request));
+  }
+  if(myRank == 0){
+    printf("ISEND to %d %p \n", 1, sendbuff);
+    MPICHECK(
+        MPI_Isend(sendbuff, size, data_type, 1, 0, MPI_COMM_WORLD, &(reqs[0])));}
+   else if(myRank == 1){     
+    printf("IRECV from %d %p \n", 0, recvbuff[0]);
+    MPICHECK(MPI_Irecv(recvbuff[0], size, data_type, 0, 0, MPI_COMM_WORLD,
+                       &(reqs[0])));
+   }
+    
+  MPICHECK(MPI_Waitall(1, reqs, MPI_STATUSES_IGNORE));
+  sleep(10);
+  printf("DONE ITER\n");
+}
+
+*/
+
+#else
+void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
+                MPI_Datatype data_type, int myRank) {
+	printf("BEGIN ITER %p %p\n", sendbuff, recvbuff[0]);
+  sleep(10);
+  if(myRank == 0){
+    printf("SEND to %d %p \n", 1, sendbuff);
+    MPICHECK(
+        MPI_Send(sendbuff, size, data_type, 1, 0, MPI_COMM_WORLD));}
+   else if(myRank == 1){     
+    printf("RECV from %d %p \n", 0, recvbuff[0]);
+    MPICHECK(MPI_Recv(recvbuff[0], size, data_type, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE));
+   }
+  sleep(10);
+  printf("DONE ITER\n");
+}
+#endif
