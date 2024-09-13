@@ -15,7 +15,7 @@
 
 #define DEBUG 1
 // #define PRINTFILE 0 
-//#define ONLY_ONE_SEND 1
+#define ONLY_ONE_SEND 1
 
 static struct options opts;
 static struct parser_doc parser_doc;
@@ -94,6 +94,7 @@ int main(int argc, char *argv[]) {
   void *recvbuff[nDev];
 
 #ifdef PRINTFILE
+  printf("noooooo\n");
   FILE *file_ptr;
   char file_name[] = "processlog_x.asd";
   file_name[11] = '0' + myRank;
