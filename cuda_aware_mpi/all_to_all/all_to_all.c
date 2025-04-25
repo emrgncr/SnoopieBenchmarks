@@ -15,7 +15,7 @@
 
 #define DEBUG 1
 // #define PRINTFILE 0 
-#define ONLY_ONE_SEND 1
+//#define ONLY_ONE_SEND 1
 
 static struct options opts;
 static struct parser_doc parser_doc;
@@ -183,46 +183,44 @@ int main(int argc, char *argv[]) {
 
 void bench_iter(int nDev, void *sendbuff, void **recvbuff, int size,
                 MPI_Datatype data_type, int myRank) {
-	printf("BEGIN ITER %p %p\n", sendbuff, recvbuff[0]);
+    printf("BEGIN ITER %p %p\n", sendbuff, recvbuff[0]);
 
-  /* :/ DOES NOT WORK IN MPI 4!
-    MPI_Request reqs[nDev - 1];
-    for(int i = 0; i < nDev - 1; i++){
-      memcpy(reqs[i],  MPI_REQUEST_NULL, sizeof(MPI_Request));
-    }
-    for (int i = 0; i < nDev; ++i) {
-      if (i == myRank)
-        continue;
-      int j = i;
-      if(i > myRank) j --;
-      MPICHECK(MPI_Isendrecv(sendbuff, size, data_type, i, 0, recvbuff[i], size,
-                             data_type, i, 0, MPI_COMM_WORLD, &(reqs[j])));
-    }
-    MPICHECK(MPI_Waitall(nDev - 1, reqs, MPI_STATUSES_IGNORE));
-  */
-  MPI_Request reqs[2 * (nDev - 1)];
-  for (int i = 0; i < 2 * (nDev - 1); i++) {
-	  printf("Create request no %d\n", i);
-    memcpy(&(reqs[i]), MPI_REQUEST_NULL, sizeof(MPI_Request));
-  }
-  for (int i = 0; i < nDev; ++i) {
-    if (i == myRank)
-      continue;
-    int j = i;
-    if (i > myRank)
-      j--;
-    printf("ISEND to %d %p \n", i, sendbuff);
-    MPICHECK(
-        MPI_Isend(sendbuff, size, data_type, i, 0, MPI_COMM_WORLD, &(reqs[j])));
-    printf("IRECV from %d %p \n", i, recvbuff[i]);
-    MPICHECK(MPI_Irecv(recvbuff[i], size, data_type, i, 0, MPI_COMM_WORLD,
-                       &(reqs[nDev - 1 + j])));
+    // Create array of request handles for non-blocking operations
+    MPI_Request reqs_1[(nDev - 1)];
+    MPI_Request reqs_2[(nDev - 1)];
     
-  }
-  MPICHECK(MPI_Waitall(2 * (nDev - 1), reqs, MPI_STATUSES_IGNORE));
-  printf("DONE ITER\n");
-}
+    int req_idx = 0;
 
+    for (int i = myRank + 1; i < nDev; ++i) {
+        printf("IRECV from %d %p \n", i, recvbuff[i]);
+        MPICHECK(MPI_Irecv(recvbuff[i], size, data_type, i, i, MPI_COMM_WORLD,
+                           &(reqs_1[req_idx++])));
+    }
+    for (int i = 0; i < myRank; ++i) {
+        printf("ISEND to %d %p \n", i, sendbuff);
+        MPICHECK(
+            MPI_Isend(sendbuff, size, data_type, i, myRank, MPI_COMM_WORLD, &(reqs_1[req_idx++])));
+    }
+    printf("Before wait 1\n");
+    MPICHECK(MPI_Waitall((nDev - 1), reqs_1, MPI_STATUSES_IGNORE));
+    printf("After wait 1\n");
+    req_idx = 0;
+
+    for (int i = 0; i < myRank; ++i) {
+        printf("IRECV from %d %p \n", i, recvbuff[i]);
+        MPICHECK(MPI_Irecv(recvbuff[i], size, data_type, i, i, MPI_COMM_WORLD,
+                           &(reqs_2[req_idx++])));
+    }
+    for (int i = myRank + 1; i < nDev; ++i) {
+        printf("ISEND to %d %p \n", i, sendbuff);
+        MPICHECK(
+            MPI_Isend(sendbuff, size, data_type, i, myRank, MPI_COMM_WORLD, &(reqs_2[req_idx++])));
+    }
+    
+    printf("Before wait 2\n");
+    MPICHECK(MPI_Waitall((nDev - 1), reqs_2, MPI_STATUSES_IGNORE));
+    printf("After wait 2\n");
+}
 
 /*
 ISEND IreCV

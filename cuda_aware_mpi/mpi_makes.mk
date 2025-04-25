@@ -1,6 +1,6 @@
 
-CC := nvcc
-CFLAGS := -ccbin /home/egencer20/repos/mpi_build/bin/mpicc 
+CC := mpicc
+#CFLAGS := -ccbin $(which nvcc) 
 
 all: $(TARGET)
 
