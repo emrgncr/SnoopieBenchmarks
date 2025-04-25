@@ -69,10 +69,13 @@ int main(int argc, char *argv[]) {
     break;
   }
 
+  CUDACHECK(cudaSetDevice(localRank));
   // initializing MPI
   MPICHECK(MPI_Init(&argc, &argv));
   MPICHECK(MPI_Comm_rank(MPI_COMM_WORLD, &myRank));
   MPICHECK(MPI_Comm_size(MPI_COMM_WORLD, &nRanks));
+
+
 
   uint64_t hostHashs[nRanks];
   char hostname[1024];
@@ -88,11 +91,11 @@ int main(int argc, char *argv[]) {
       localRank++;
   }
 
-  FILE *file_ptr;
-  char file_name[] = "processlog_x.asd";
-  file_name[11] = '0' + myRank;
-  file_ptr = freopen(file_name, "w", stdout);
-  
+  // FILE *file_ptr;
+  // char file_name[] = "processlog_x.asd";
+  // file_name[11] = '0' + myRank;
+  // file_ptr = freopen(file_name, "w", stdout);
+
 
   int nDev = nRanks;
   void *sendbuff;
@@ -103,16 +106,18 @@ int main(int argc, char *argv[]) {
   report_options(&opts);
   endparse = clock();
 
-  CUDACHECK(cudaSetDevice(localRank));
   CUDACHECK(cudaMalloc(&sendbuff, size * data_size));
   CUDACHECK(cudaMalloc(&(recvbuff), size * data_size));
 
   random_fill(sendbuff, size * data_size);
 
+  CUDACHECK(cudaDeviceSynchronize());
+
 #ifdef DEBUG
   int *_test = malloc(size * data_size);
   CUDACHECK(
       cudaMemcpy(_test, sendbuff, size * data_size, cudaMemcpyDeviceToHost));
+  CUDACHECK(cudaDeviceSynchronize());
   REPORT("CUDA FIRST INT: %d\n", _test[0]);
   free(_test);
 #endif
@@ -148,7 +153,7 @@ int main(int argc, char *argv[]) {
 
   end = clock();
 
-	fclose(file_ptr);
+	// fclose(file_ptr);
 
 #define CLOCK_CONVERT(x) (((double)x) / CLOCKS_PER_SEC)
 
@@ -174,8 +179,9 @@ void bench_iter(int nDev, void *sendbuff, void *recvbuff, int size,
                 MPI_Datatype data_type, int myRank) {
   	printf("STARTING ITER\n");
 	printf("sendBuffer: %p, recvbuff: %p\n", sendbuff, recvbuff);
-#pragma acc host_data use_device (sendbuff, recvbuff)
+  //MPI_Request request;
 	MPICHECK(MPI_Allreduce(sendbuff, recvbuff, size, data_type, MPI_SUM,
                          MPI_COMM_WORLD));
+	//MPICHECK(MPI_Wait(&request, MPI_STATUS_IGNORE));
 	printf("DONE ITER\n");
 }
